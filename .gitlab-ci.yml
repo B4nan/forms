@@ -1,10 +1,5 @@
-# Run before each script
-before_script:
-
-# Parallel jobs, each line is a parallel build
-jobs:
-  - script: “composer install && cd tests && ./run tap”
-    runner: “php5.5”
-    name: “Test”
-    tags: false
-    branches: true
+test:
+  script:
+    - composer install
+    - cd tests
+    - ./run tap
