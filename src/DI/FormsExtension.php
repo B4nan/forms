@@ -33,7 +33,7 @@ class FormsExtension extends CompilerExtension
 	public function afterCompile(ClassType $class)
 	{
 		$initialize = $class->methods['initialize'];
-		$initialize->addBody('\Bargency\Forms\Controls\MultiUpload::register($this);');
+//		$initialize->addBody('\Bargency\Forms\Controls\MultiUpload::register($this);'); // todo
 		$initialize->addBody('\Bargency\Forms\Container::register();');
 		$initialize->addBody('\Kdyby\Replicator\Container::register();');
 	}

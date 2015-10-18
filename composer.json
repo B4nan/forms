@@ -17,9 +17,12 @@
 	},
 	"minimum-stability": "stable",
 	"require": {
+		"latte/latte": "2.3.*",
+		"tracy/tracy": "2.3.*",
 		"nette/forms": "2.3.*",
 		"nette/application": "2.3.*",
 		"nette/di": "2.3.*",
+		"nette/utils": "2.3.*",
 		"nette/php-generator": "2.3.*",
 		"nette/bootstrap": "2.3.*",
 		"kdyby/forms-replicator": "@dev"

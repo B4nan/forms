@@ -2,10 +2,23 @@
 
 namespace Bargency\Tests\Forms;
 
-use Tester\TestCase,
-	Tester\Assert,
-	Bargency\Forms\Form,
-	Bargency\Forms\Container;
+use Bargency\Forms\Controls\BooleanInput;
+use Bargency\Forms\Controls\EditableSelectBox;
+use Bargency\Forms\Controls\PhoneInput;
+use Bargency\Forms\Controls\UrlInput;
+use Bargency\Forms\Form;
+use Bargency\Forms\Container;
+use Bargency\Forms\Controls\DatePicker;
+use Bargency\Forms\Controls\DateRangePicker;
+use Bargency\Forms\Controls\DateTimePicker;
+use Bargency\Forms\Controls\HiddenField;
+use Bargency\Forms\Controls\Redactor;
+use Bargency\Forms\Controls\TagInput;
+use Bargency\Forms\Controls\MultiUpload;
+use Nette\Forms\Controls\SubmitButton;
+use Nette\Forms\Controls\TextInput;
+use Tester\TestCase;
+use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
@@ -27,29 +40,41 @@ class ContainerTest extends TestCase
 		$form = new Form;
 
 		$container = $form->addContainer('container');
-		Assert::true($container instanceof \Bargency\Forms\Container);
+		Assert::type(Container::class, $container);
 		$innerContainer = $container->addContainer('container');
-		Assert::true($innerContainer instanceof \Bargency\Forms\Container);
+		Assert::type(Container::class, $innerContainer);
 		$tag = $container->addTag('tag');
-		Assert::true($tag instanceof \Bargency\Forms\Controls\TagInput);
+		Assert::type(TagInput::class, $tag);
 		$redactor = $container->addRedactor('redactor');
-		Assert::true($redactor instanceof \Bargency\Forms\Controls\Redactor);
+		Assert::type(Redactor::class, $redactor);
 		$dateTime = $container->addDateTime('dateTime');
-		Assert::true($dateTime instanceof \Bargency\Forms\Controls\DateTimePicker);
-		$dateRange = $form->addDateRange('dateRange');
-		Assert::true($dateRange instanceof \Bargency\Forms\Controls\DateRangePicker);
+		Assert::type(DateTimePicker::class, $dateTime);
+		$dateRange = $container->addDateRange('dateRange');
+		Assert::type(DateRangePicker::class, $dateRange);
 		$date = $container->addDate('date');
-		Assert::true($date instanceof \Bargency\Forms\Controls\DatePicker);
+		Assert::type(DatePicker::class, $date);
 		$time = $container->addTime('time');
-		Assert::true($time instanceof \Nette\Forms\Controls\TextInput);
+		Assert::type(TextInput::class, $time);
 		$number = $container->addNumber('number', 'Number', 1, 1, 10);
-		Assert::true($number instanceof \Nette\Forms\Controls\TextInput);
+		Assert::type(TextInput::class, $number);
 		$range = $container->addRange('range', 'Range', 1, 1, 10);
-		Assert::true($range instanceof \Nette\Forms\Controls\TextInput);
-//		$multiUpload = $form->addMultiUpload('multiUpload');
-//		Assert::true($multiUpload instanceof \Bargency\Forms\Controls\MultiUpload);
+		Assert::type(TextInput::class, $range);
 		$hidden = $container->addHidden('hidden');
-		Assert::true($hidden instanceof \Bargency\Forms\Controls\HiddenField);
+		Assert::type(HiddenField::class, $hidden);
+		$url = $container->addUrl('url');
+		Assert::type(UrlInput::class, $url);
+		$boolean = $container->addBoolean('bool');
+		Assert::type(BooleanInput::class, $boolean);
+		$eselect = $container->addEditableSelect('eselect', NULL, ['a' => 'A', 'b' => 'B']);
+		Assert::type(EditableSelectBox::class, $eselect);
+		$submit = $container->addSubmit('submit');
+		Assert::type(SubmitButton::class, $submit);
+		$phone = $container->addPhone('phone');
+		Assert::type(PhoneInput::class, $phone);
+		$float = $container->addFloat('float', NULL, 5, 20);
+		Assert::type(TextInput::class, $float);
+//		$multiUpload = $form->addMultiUpload('multiUpload');
+//		Assert::type(MultiUpload::class, $multiUpload);
 	}
 
 	public function testResetValues()

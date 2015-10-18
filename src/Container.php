@@ -11,6 +11,16 @@ class Container extends NContainer
 {
 
 	/**
+	 * Register
+	 */
+	public static function register()
+	{
+		NContainer::extensionMethod('addDate', function (NContainer $_this, $name, $label = NULL, $dateFormat = 'j.n.Y') {
+			return $_this[$name] = new Controls\DatePicker($dateFormat, $label);
+		});
+	}
+
+	/**
 	 * Adds naming container to the form.
 	 * @param  string  name
 	 * @return Container
@@ -31,7 +41,7 @@ class Container extends NContainer
 	 */
 	public function addSubmit($name, $caption = NULL, $secret = 'nospam')
 	{
-		if (Form::$spamProtection) {
+		if (Form::isSpamProtection()) {
 			$label = $this->translator->translate('Fill in "%s"', $secret);
 			$noSpam = $this->addText('nospam', $label)
 						   ->addRule(Form::FILLED, 'You are a spambot!')
@@ -229,7 +239,7 @@ class Container extends NContainer
 	public function addFloat($name, $label = NULL, $min = NULL, $max = NULL)
 	{
 		$item = $this->addText($name, $label);
-		$item->addCondition(self::FILLED)->addRule(self::FLOAT);
+		$item->addCondition(Form::FILLED)->addRule(Form::FLOAT);
 		$range = [NULL, NULL];
 		if ($min !== NULL) {
 			$item->setAttribute('min', $min);
@@ -240,7 +250,7 @@ class Container extends NContainer
 			$range[1] = $max;
 		}
 		if ($range != [NULL, NULL]) {
-			$item->addCondition(self::FILLED)->addRule(self::RANGE, NULL, $range);
+			$item->addCondition(Form::FILLED)->addRule(Form::RANGE, NULL, $range);
 		}
 
 		return $item;

@@ -137,8 +137,8 @@ class Form extends NForm
 	/**
 	 * Adds naming container to the form.
 	 *
-	 * @param  string  name
-	 * @return \Nette\Forms\Container
+	 * @param string $name
+	 * @return Container
 	 */
 	public function addContainer($name)
 	{
@@ -193,7 +193,6 @@ class Form extends NForm
 	 * @param string $name
 	 * @param string $label
 	 * @param string $dateFormat
-	 * @param string $timeFormat
 	 * @return Controls\DateTimePicker
 	 */
 	public function addDateRange($name, $label = NULL, $dateFormat = 'j.n.Y')
@@ -207,6 +206,7 @@ class Form extends NForm
 	 * @param string $name
 	 * @param strign $label
 	 * @param string $dateFormat
+	 * @return Controls\DatePicker
 	 */
 	public function addDate($name, $label = NULL, $dateFormat = 'j.n.Y')
 	{
@@ -218,6 +218,7 @@ class Form extends NForm
 	 *
 	 * @param string $name
 	 * @param strign $label
+	 * @return \Nette\Forms\Controls\TextInput
 	 */
 	public function addTime($name, $label = NULL)
 	{

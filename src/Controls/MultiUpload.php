@@ -2,15 +2,20 @@
 
 namespace Bargency\Forms\Controls;
 
+use Bargency\Forms\Controls\MultiUpload\MFUModel;
+use Bargency\Forms\Controls\MultiUpload\Plupload;
+use Bargency\Forms\Controls\MultiUpload\MFUQueue;
+use Latte\Engine;
+use Nette\Application\UI\Form;
+use Nette\DI\Container;
 use Nette\Forms\Controls\UploadControl;
 use Nette\Forms\IControl;
-use Nette\InvalidStateException;
-use Nette\Latte\Engine;
+use Nette\Localization\ITranslator;
+use Nette\Utils\Html;
+use Nette\Http\FileUpload;
+use Nette\Application\UI\ITemplate;
 use Nette\NotSupportedException;
-use Nette\Templating\FileTemplate;
-use Nette\Utils\Html,
-	Nette\Http\FileUpload;
-use Bargency\Forms\Controls\MultiUpload\MFUQueue;
+use Nette\InvalidStateException;
 
 /**
  * MultiUpload
@@ -51,19 +56,21 @@ class MultiUpload extends UploadControl
 	public $useDefaultTemplate = TRUE;
 
 	/**
-	 * @param Container
+	 * @param Container $container
 	 */
-	public static function register($context)
+	public static function register(Container $container)
 	{
-		$tempPath = $context->parameters['tempDir'] . '/' . self::TEMP_DIR;
+		$tempPath = $container->parameters['tempDir'] . '/' . self::TEMP_DIR;
 		if (!file_exists($tempPath)) {
 			mkdir($tempPath, 0777, TRUE);
 		}
 
-		$application = $context->application;
-		self::$request = $request = $context->httpRequest;
-		self::$translator = $context->getByType('\Nette\Localization\ITranslator');
-		self::$model = $model = $context->mfuModel;
+		$application = $container->getService('application');
+		self::$request = $request = $container->getService('httpRequest');
+		if ($container->hasService('\Nette\Utils\ITranslator')) {
+			self::$translator = $container->getByType('\Nette\Utils\ITranslator');
+		}
+		self::$model = $model = $container->getService('mfuModel');
 		self::$interface = $interface = new MultiUpload\Plupload($request, $model, $tempPath);
 		$maxInputTime = (int) ini_get('max_input_time') + 5;
 		$lifeTime = max(self::MIN_LIFETIME, $maxInputTime);
@@ -72,8 +79,8 @@ class MultiUpload extends UploadControl
 		$application->onStartup[] = function() use ($interface) {
 			$interface->handleUploads();
 		};
-		$application->onShutdown[] = function() use ($model, $context) {
-			if (!$context->parameters['productionMode'] || rand(1, 100) < 5) {
+		$application->onShutdown[] = function() use ($model, $container) {
+			if (!$container->parameters['productionMode'] || rand(1, 100) < 5) {
 				$model->cleanup();
 			}
 		};
@@ -98,9 +105,9 @@ class MultiUpload extends UploadControl
 	 */
 	protected function attached($control)
 	{
-		if ($control instanceof Nette\Application\UI\Form) {
+		if ($control instanceof Form) {
 			$control->elementPrototype->enctype = 'multipart/form-data';
-			$control->elementPrototype->method = \Nette\Forms\Form::POST;
+			$control->elementPrototype->method = Form::POST;
 		}
 	}
 
