@@ -1,0 +1,31 @@
+# Bargency test config file
+# RoyalDesign, s.r.o.
+# www.royaldesign.cz
+# info@royaldesign.cz
+
+parameters:
+	dirs:
+		imageCache: '%tempDir%/www/cache/images'
+	webloader:
+		tempPath: '%tempDir%/www'
+		minify: false
+	database:
+		drive: mysql
+		charset: utf8
+		hostname: 127.0.0.1
+		username: root
+		password:
+		database: Bargency_test
+		substitutes:
+			pre: Bargency_
+			crm: crm_
+		persistent: true
+		lazy: true
+		profiler: true
+		result:
+			detectTypes: true
+
+services:
+	nette.mailer:
+		class: Bargency\Mail\FileMailer(%tempDir%)
+

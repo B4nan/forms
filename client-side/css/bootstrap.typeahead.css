@@ -1,0 +1,90 @@
+.tt-hint, .tt-query {
+	color: #fff;
+	background-color: transparent;
+}
+
+input[type=text].tt-hint {
+	padding: 0;
+	margin: 0;
+	height: 23px;
+	width: 100%;
+	text-indent: 3px;
+}
+
+.tt-suggestion {
+	padding: 3px 7px;
+	font-size: 12px;
+	line-height: 18px;
+	position: relative;
+}
+
+.main .tt-suggestion p {
+	margin: 2px 0;
+}
+
+.tt-suggestion.tt-cursor,
+.tt-suggestion.tt-cursor .value,
+.tt-suggestion.tt-cursor .category,
+.tt-suggestion.tt-cursor .created,
+.tt-suggestion.tt-cursor .desc {
+	color: #59a5cf;
+}
+
+.tt-suggestion p {
+	margin: 0;
+}
+
+#search-autocomplete .tt-dropdown-menu {
+	max-height: 600px;
+	overflow-y: auto;
+	min-width: 350px;
+	margin-top: 5px;
+}
+
+.tt-dropdown-menu {
+	z-index: 1100 !important;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	-webkit-border-radius: 3px;
+	   -moz-border-radius: 3px;
+			border-radius: 3px;
+	-webkit-box-shadow: 0 2px 5px rgba(0,0,0,.2);
+	   -moz-box-shadow: 0 2px 5px rgba(0,0,0,.2);
+			box-shadow: 0 2px 5px rgba(0,0,0,.2);
+}
+
+.tt-suggestion + .tt-suggestion {
+  font-size: 12px;
+  border-top: 1px solid #ccc;
+}
+
+.tt-suggestions .category {
+	float: right;
+	font-style: italic;
+	font-size: 12px;
+	color: #999;
+	margin: 0;
+}
+
+.tt-suggestions .value {
+	font-size: 12px;
+	font-weight: 600;
+	color: #333;
+	margin: 0;
+}
+
+.tt-suggestions .desc {
+	margin: 0;
+	font-size: 11px;
+	color: #666;
+}
+
+.tt-suggestions .created {
+	font-size: 10px;
+	color: #999;
+	margin: 0;
+	position: absolute;
+	right: 5px;
+	bottom: 3px;
+}

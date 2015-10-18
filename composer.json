@@ -1,0 +1,38 @@
+{
+	"name": "bargency/forms",
+	"type": "library",
+	"description": "Nette forms wrapper",
+	"keywords": ["nette", "bargency", "forms"],
+	"homepage": "https://www.bargency.com",
+	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"authors": [
+		{
+			"name": "Martin Adámek",
+			"email": "adamek@bargency.com"
+		}
+	],
+	"support": {
+		"email": "adamek@bargency.com",
+		"issues": "http://gitlab.royaldesign.cz/bargency/forms/issues"
+	},
+	"minimum-stability": "stable",
+	"require": {
+		"nette/forms": "2.3.*",
+		"nette/application": "2.3.*",
+		"nette/di": "2.3.*",
+		"nette/php-generator": "2.3.*",
+		"nette/bootstrap": "2.3.*",
+		"kdyby/forms-replicator": "@dev"
+	},
+	"require-dev": {
+		"nette/tester": "@dev",
+		"jakub-onderka/php-parallel-lint": "0.*",
+		"jakub-onderka/php-console-highlighter": "0.*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Bargency\\Forms\\": "src/",
+			"Bargency\\Tests\\": "tests/"
+		}
+	}
+}
