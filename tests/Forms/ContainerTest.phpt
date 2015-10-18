@@ -30,11 +30,6 @@ require __DIR__ . '/../bootstrap.php';
 class ContainerTest extends TestCase
 {
 
-	public function setUp()
-	{
-		// no setup
-	}
-
 	public function testFormControlsAdding()
 	{
 		$form = new Form;
