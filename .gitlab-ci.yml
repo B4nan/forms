@@ -1,11 +1,3 @@
-# Refs to skip
-skip_refs: “deploy*”
-
-# Run before each script
-
-# Refs to skip
-skip_refs: “deploy*”
-
 # Run before each script
 before_script:
 
