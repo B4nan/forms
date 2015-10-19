@@ -39,7 +39,8 @@ class Form extends NForm
 	{
 		parent::__construct($parent, $name);
 
-		$this->setRenderer(new Renderer($this));
+//		$this->setRenderer(new Renderer($this));
+		$this->setRenderer(new Renderer3($this));
 
 		if (self::$useCsrfToken) {
 			$this->addProtection('The form has expired. Please re-submit.'); // CSRF protection
@@ -50,6 +51,26 @@ class Form extends NForm
 		Validator::$messages[Controls\TagInput::UNIQUE] = 'Please insert each tag only once.';
 		Validator::$messages[Controls\TagInput::ORIGINAL] = 'Please do use only suggested tags.';
 		Validator::$messages[Controls\DateTimePicker::VALID] = 'Invalid date time';
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function addSelect($name, $label = NULL, array $items = NULL, $size = NULL)
+	{
+		$control = parent::addSelect($name, $label, $items, $size);
+		$control->checkAllowedValues = FALSE;
+		return $control;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function addMultiSelect($name, $label = NULL, array $items = NULL, $size = NULL)
+	{
+		$control = parent::addMultiSelect($name, $label, $items, $size);
+		$control->checkAllowedValues = FALSE;
+		return $control;
 	}
 
 	/**
@@ -66,7 +87,13 @@ class Form extends NForm
 	protected function attached($presenter)
 	{
 		parent::attached($presenter);
-		$this->setTranslator($presenter->translator);
+
+		if (isset($presenter->translator)) {
+			$this->setTranslator($presenter->translator);
+		}
+
+//		FormMacros::setFormClasses($this);
+		FormMacros3::setFormClasses($this);
 	}
 
 	/**

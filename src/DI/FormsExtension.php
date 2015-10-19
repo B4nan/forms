@@ -21,7 +21,8 @@ class FormsExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 		$engine = $builder->getDefinition('nette.latteFactory');
-		$install = 'Bargency\Forms\FormMacros::install';
+//		$install = 'Bargency\Forms\FormMacros::install';
+		$install = 'Bargency\Forms\FormMacros3::install';
 		$engine->addSetup($install . '(?->getCompiler())', ['@self']);
 	}
 
