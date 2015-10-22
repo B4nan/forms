@@ -57,7 +57,6 @@ class Plupload extends Object
 
 		// Settings
 		$queueModel = $this->model->getQueue($token);
-		$this->tempPath = $this->tempPath;
 		$maxFileAge = MultiUpload::MIN_LIFETIME; // Temp file age in seconds
 		@set_time_limit($maxFileAge);
 
@@ -187,6 +186,8 @@ class Plupload extends Object
 
 	/**
 	 * Renders interface to <div>
+	 * @param MultiUpload $upload
+	 * @return string
 	 */
 	public function render(MultiUpload $upload)
 	{

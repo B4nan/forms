@@ -6,11 +6,16 @@ use Bargency\Forms\Controls\MultiUpload\MFUModel;
 use Bargency\Forms\Controls\MultiUpload\Plupload;
 use Bargency\Forms\Controls\MultiUpload\MFUQueue;
 use Latte\Engine;
+use Latte\Macros\CoreMacros;
 use Nette\Application\UI\Form;
+use Nette\Application\UI\ITemplateFactory;
+use Nette\Bridges\ApplicationLatte\Template;
 use Nette\DI\Container;
 use Nette\Forms\Controls\UploadControl;
 use Nette\Forms\IControl;
 use Nette\Localization\ITranslator;
+use Nette\Templating\FileTemplate;
+use Nette\Utils\FileSystem;
 use Nette\Utils\Html;
 use Nette\Http\FileUpload;
 use Nette\Application\UI\ITemplate;
@@ -43,6 +48,9 @@ class MultiUpload extends UploadControl
 	/** @var MFUModel */
 	protected static $model;
 
+	/** @var ITemplateFactory */
+	private static $templateFactory;
+
 	/** @var string */
 	public $token;
 
@@ -61,14 +69,12 @@ class MultiUpload extends UploadControl
 	public static function register(Container $container)
 	{
 		$tempPath = $container->parameters['tempDir'] . '/' . self::TEMP_DIR;
-		if (!file_exists($tempPath)) {
-			mkdir($tempPath, 0777, TRUE);
-		}
+		FileSystem::createDir($tempPath);
 
 		$application = $container->getService('application');
 		self::$request = $request = $container->getService('httpRequest');
-		if ($container->hasService('\Nette\Utils\ITranslator')) {
-			self::$translator = $container->getByType('\Nette\Utils\ITranslator');
+		if ($container->getByType(ITranslator::class, FALSE)) {
+			self::$translator = $container->getByType(ITranslator::class);
 		}
 		self::$model = $model = $container->getService('mfuModel');
 		self::$interface = $interface = new MultiUpload\Plupload($request, $model, $tempPath);
@@ -84,6 +90,8 @@ class MultiUpload extends UploadControl
 				$model->cleanup();
 			}
 		};
+
+		self::$templateFactory = $container->getByType(ITemplateFactory::class);
 	}
 
 	/**
@@ -254,12 +262,10 @@ class MultiUpload extends UploadControl
 	 */
 	public static function createTemplate($file = null)
 	{
-		$template = new FileTemplate($file);
-
+		/** @var Template $template */
+		$template = self::$templateFactory->createTemplate();
+		$template->setFile($file);
 		$template->setTranslator(self::$translator);
-		$template->basePath = self::$request->url->basePath;
-		$template->registerHelperLoader('Nette\Templating\Helpers::loader');
-		$template->registerFilter(new Engine);
 
 		return $template;
 	}
