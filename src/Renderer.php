@@ -122,6 +122,23 @@ class Renderer extends DefaultFormRenderer
 			}
 		}
 
+		// input append/prepend
+		$prepend = $control->getOption('input-prepend');
+		$append = $control->getOption('input-append');
+		if ($prepend || $append) {
+			$inner = Html::el('div');
+			if ($prepend = $control->getOption('input-prepend')) {
+				$inner->addClass('input-prepend');
+			}
+			if ($append = $control->getOption('input-append')) {
+				$inner->addClass('input-append');
+			}
+			$html = $prepend . $controlPart->getHtml() . $append;
+			$inner->setHtml($html);
+			$controlPart->removeChildren();
+			$controlPart->add($inner);
+		}
+
 		$pair->add($controlPart);
 		$pair->class($this->getValue($control->isRequired() ? 'pair .required' : 'pair .optional'), TRUE);
 		$pair->class($control->hasErrors() ? $this->getValue('pair .error') : NULL, TRUE);

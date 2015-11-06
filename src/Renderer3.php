@@ -80,12 +80,30 @@ class Renderer3 extends DefaultFormRenderer
 		}
 		$pair->add($l);
 
+		/** @var Html $controlPart */
 		$controlPart = $this->renderControl($control);
 		if ($control instanceof Controls\CheckboxList || $control instanceof Controls\RadioList) {
 			foreach ($controlPart->getChildren() as & $item) {
 				$class = $control->getControlPrototype()->type . '-inline';
 				$item = Nette\Utils\Strings::replace($item, '/<label>/i', '<label class="' . $class . '">');
 			}
+		}
+
+		// input append/prepend
+		$prepend = $control->getOption('input-prepend');
+		$append = $control->getOption('input-append');
+		if ($prepend || $append) {
+			$inner = Html::el('div')->addClass('input-group');
+			if ($prepend) {
+				$prepend = Html::el('div')->addClass('input-group-addon')->setText($prepend);
+			}
+			if ($append) {
+				$append = Html::el('div')->addClass('input-group-addon')->setText($append);
+			}
+			$html = $prepend . $controlPart->getHtml() . $append;
+			$inner->setHtml($html);
+			$controlPart->removeChildren();
+			$controlPart->add($inner);
 		}
 
 		$pair->add($controlPart);
