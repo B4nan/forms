@@ -1,5 +1,5 @@
 test:
   script:
-    - composer install
+    - COMPOSER_ROOT_VERSION=dev-master composer install
     - cd tests
     - ./run tap
