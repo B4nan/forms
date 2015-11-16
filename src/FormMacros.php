@@ -89,7 +89,7 @@ class FormMacros extends Nette\Bridges\FormsLatte\FormMacros
 	/**
 	 * @return void
 	 */
-	public static function renderFormBegin(Nette\Forms\Form $form, array $attrs, $withTags = TRUE)
+	public static function setFormClasses(Nette\Forms\Form $form)
 	{
 		// form class
 		$form->getElementPrototype()->addClass('form-horizontal');
@@ -116,7 +116,11 @@ class FormMacros extends Nette\Bridges\FormsLatte\FormMacros
 				$control->getSeparatorPrototype()->setName(NULL);
 			}
 		}
+	}
 
+	public static function renderFormBegin(Nette\Forms\Form $form, array $attrs, $withTags = TRUE)
+	{
+		self::setFormClasses($form);
 		parent::renderFormBegin($form, $attrs, $withTags);
 	}
 
@@ -150,10 +154,10 @@ class FormMacros extends Nette\Bridges\FormsLatte\FormMacros
 			return $writer->write(
 				'echo $_label'
 				. ($node->tokenizer->isNext() ? '->addAttributes(%node.array)' : '')
-				. '->getText()' . (!Form::getRenderColonSuffix() ? '' : ' . ":"') . ' . $_label->endTag() . "</div>"'
+				. '->getText()' . (! Form::getOption('renderColonSuffix') ? '' : ' . ":"') . ' . $_label->endTag() . "</div>"'
 			);
 		} else {
-			return $writer->write('if ($_label) echo ' . (!Form::getRenderColonSuffix() ?: '":" . ') . '$_label->endTag() . "</div>"');
+			return $writer->write('if ($_label) echo ' . (! Form::getOption('renderColonSuffix') ?: '":" . ') . '$_label->endTag() . "</div>"');
 		}
 	}
 

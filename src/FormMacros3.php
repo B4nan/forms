@@ -165,10 +165,10 @@ class FormMacros3 extends Nette\Bridges\FormsLatte\FormMacros
 			return $writer->write(
 				'echo $_label'
 				. ($node->tokenizer->isNext() ? '->addAttributes(%node.array)' : '')
-				. '->getText()' . (!Form::getRenderColonSuffix() ? '' : ' . ":"') . ' . $_label->endTag() . "</div>"'
+				. '->getText()' . (! Form::getOption('renderColonSuffix') ? '' : ' . ":"') . ' . $_label->endTag() . "</div>"'
 			);
 		} else {
-			return $writer->write('if ($_label) echo ' . (!Form::getRenderColonSuffix() ?: '":" . ') . '$_label->endTag() . "</div>"');
+			return $writer->write('if ($_label) echo ' . (! Form::getOption('renderColonSuffix') ?: '":" . ') . '$_label->endTag() . "</div>"');
 		}
 	}
 

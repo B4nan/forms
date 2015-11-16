@@ -2,10 +2,15 @@
 
 namespace Bargency\Forms;
 
-use Nette\Application\UI\Form as NForm,
-	Nette\Forms\Rules;
+use Bargency\Forms\Controls\HiddenField;
+use Nette\Application\UI\Form as NForm;
+use Nette\Application\UI\Presenter;
 use Nette\ComponentModel\IContainer;
+use Nette\Forms\Controls\BaseControl;
 use Nette\Forms\Validator;
+use Nette\InvalidStateException;
+use Nette\Utils\ArrayHash;
+use Nette\Utils\DateTime;
 
 /**
  * @author Martin Adámek <adamek@bargency.com>
@@ -22,14 +27,8 @@ class Form extends NForm
 	/** @var int other form */
 	const TYPE_OTHER = 2;
 
-	/** @var bool toggle rendering of colon suffix in all labels */
-	private static $renderColonSuffix = FALSE;
-
-	/** @var bool toggle spam protection */
-	private static $spamProtection = FALSE;
-
-	/** @var bool toggle automatic CSRF protection */
-	private static $useCsrfToken = TRUE;
+	/** @var array */
+	private static $config;
 
 	/**
 	 * @param IContainer $parent
@@ -39,14 +38,14 @@ class Form extends NForm
 	{
 		parent::__construct($parent, $name);
 
-//		$this->setRenderer(new Renderer($this));
-		$this->setRenderer(new Renderer3($this));
+		$renderer = self::getOption('renderer');
+		$this->setRenderer(new $renderer($this));
 
-		if (self::$useCsrfToken) {
+		if (self::getOption('csrfToken')) {
 			$this->addProtection('The form has expired. Please re-submit.'); // CSRF protection
 		}
 
-		$this->monitor('Nette\Application\UI\Presenter');
+		$this->monitor(Presenter::class);
 
 		Validator::$messages[Controls\TagInput::UNIQUE] = 'Please insert each tag only once.';
 		Validator::$messages[Controls\TagInput::ORIGINAL] = 'Please do use only suggested tags.';
@@ -92,8 +91,8 @@ class Form extends NForm
 			$this->setTranslator($presenter->translator);
 		}
 
-//		FormMacros::setFormClasses($this);
-		FormMacros3::setFormClasses($this);
+		$macros = self::getOption('macros');
+		$macros::setFormClasses($this);
 	}
 
 	/**
@@ -116,14 +115,12 @@ class Form extends NForm
 	 */
 	public function addSubmit($name, $caption = NULL, $secret = 'nospam')
 	{
-		if (self::$spamProtection) {
-//			$label = $this->translator->translate();
-			$noSpam = $this->addText('nospam', ['Fill in "%s"', $secret])
-						   ->addRule(Form::FILLED, 'You are a spambot!')
-						   ->addRule(Form::EQUAL, 'You are a spambot!', $secret);
-
-			$noSpam->labelPrototype->class('nospam');
-			$noSpam->controlPrototype->class('nospam');
+		if (self::getOption('spamProtection')) {
+			$noSpam = $this->addText('website_', 'Website')
+							->addRule(Form::BLANK, 'You are a spambot!')
+							->setOmitted();
+			$noSpam->getControlPrototype()->class('hidden');
+			$noSpam->getLabelPrototype()->class('hidden');
 		}
 
 		$control = parent::addSubmit($name, $caption);
@@ -282,7 +279,7 @@ class Form extends NForm
 	{
 		$item = $this->addText($name, $label);
 		$item->setAttribute('step', $step)->setAttribute('type', 'number')
-			->addCondition(self::FILLED)->addRule(self::NUMERIC);
+				->addCondition(self::FILLED)->addRule(self::NUMERIC);
 		$range = [NULL, NULL];
 		if ($min !== NULL) {
 			$item->setAttribute('min', $min);
@@ -354,13 +351,16 @@ class Form extends NForm
 	/**
 	 * Adds a boolean picker
 	 *
-	 * @param string	control name
-	 * @param string	label
+	 * @param $name
+	 * @param null $label
+	 * @param null $default
 	 * @return Controls\BooleanInput
 	 */
-	public function addBoolean($name, $label = NULL)
+	public function addBoolean($name, $label = NULL, $default = NULL)
 	{
-		return $this[$name] = new Controls\BooleanInput($label);
+		$c = new Controls\BooleanInput($label);
+		$c->value = $default;
+		return $this[$name] = $c;
 	}
 
 	/**
@@ -382,8 +382,8 @@ class Form extends NForm
 	/**
 	 * Adds hidden form control used to store a non-displayed value.
 	 *
-	 * @param  string  control name
-	 * @param  mixed   default value
+	 * @param  string  $name name
+	 * @param  mixed   $default value
 	 * @return HiddenField
 	 */
 	public function addHidden($name, $default = NULL)
@@ -394,8 +394,8 @@ class Form extends NForm
 	}
 
 	/**
-	 * @param  bool  return values as an array?
-	 * @return Nette\ArrayHash|array
+	 * @param bool $asArray values as an array?
+	 * @return ArrayHash|array
 	 */
 	public function getValues($asArray = FALSE)
 	{
@@ -403,11 +403,11 @@ class Form extends NForm
 
 		foreach ($values as $key => &$value) {
 			if ($value
-				&& isset($this[$key]->control)
-				&& isset($this[$key]->control->attrs['type'])
-				&& $this[$key]->control->attrs['type'] === 'datetime'
+					&& isset($this[$key]->control)
+					&& isset($this[$key]->control->attrs['type'])
+					&& $this[$key]->control->attrs['type'] === 'datetime'
 			) {
-				$value = new \Nette\DateTime($value);
+				$value = new DateTime($value);
 			}
 		}
 
@@ -454,51 +454,32 @@ class Form extends NForm
 	}
 
 	/**
-	 * @param bool $val
+	 * @param array $config
 	 */
-	public static function setRenderColonSuffix($val = TRUE)
+	public static function setConfig(array $config)
 	{
-		self::$renderColonSuffix = (bool) $val;
+		self::$config = $config;
 	}
 
 	/**
-	 * @return bool
+	 * @param $name
+	 * @param $value
 	 */
-	public static function getRenderColonSuffix()
+	public static function setOption($name, $value)
 	{
-		return self::$renderColonSuffix;
+		self::$config[$name] = $value;
 	}
 
 	/**
-	 * @return boolean
+	 * @param string $name
+	 * @return string
 	 */
-	public static function getUseCsrfToken()
+	public static function getOption($name)
 	{
-		return self::$useCsrfToken;
-	}
-
-	/**
-	 * @param boolean $useCsrfToken
-	 */
-	public static function setUseCsrfToken($useCsrfToken = TRUE)
-	{
-		self::$useCsrfToken = $useCsrfToken;
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public static function isSpamProtection()
-	{
-		return self::$spamProtection;
-	}
-
-	/**
-	 * @param boolean $spamProtection
-	 */
-	public static function setSpamProtection($spamProtection = TRUE)
-	{
-		self::$spamProtection = $spamProtection;
+		if (! isset(self::$config[$name])) {
+			throw new InvalidStateException("Option $name does not exist!");
+		}
+		return self::$config[$name];
 	}
 
 }
