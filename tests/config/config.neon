@@ -2,3 +2,13 @@
 
 application:
 	scanDirs: false
+
+
+extensions:
+	bargencyForms: Bargency\Forms\DI\FormsExtension
+
+
+bargencyForms:
+	renderer: Bargency\Forms\Renderer
+	macros: Bargency\Forms\FormMacros
+	renderColonSuffix: FALSE

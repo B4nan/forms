@@ -110,10 +110,9 @@ class Form extends NForm
 	/**
 	 * @param  string  control name
 	 * @param  string  caption
-	 * @param  string  secret used for spam protection
 	 * @return \Nette\Forms\Controls\SubmitButton
 	 */
-	public function addSubmit($name, $caption = NULL, $secret = 'nospam')
+	public function addSubmit($name, $caption = NULL)
 	{
 		if (self::getOption('spamProtection')) {
 			$noSpam = $this->addText('website_', 'Website')
@@ -351,9 +350,9 @@ class Form extends NForm
 	/**
 	 * Adds a boolean picker
 	 *
-	 * @param $name
-	 * @param null $label
-	 * @param null $default
+	 * @param string $name
+	 * @param string $label
+	 * @param bool $default
 	 * @return Controls\BooleanInput
 	 */
 	public function addBoolean($name, $label = NULL, $default = NULL)

@@ -29,6 +29,7 @@
 	},
 	"require-dev": {
 		"nette/tester": "@dev",
+		"kdyby/tester-extras": "@dev",
 		"jakub-onderka/php-parallel-lint": "0.*",
 		"jakub-onderka/php-console-highlighter": "0.*"
 	},
