@@ -2,6 +2,7 @@
 
 namespace Bargency\Forms;
 
+use Bargency\Forms\Controls\CKEditor;
 use Nette\Forms\Rendering\DefaultFormRenderer,
 	Nette\Forms\Controls,
 	Nette\Utils\Html,
@@ -80,8 +81,18 @@ class Renderer3 extends DefaultFormRenderer
 		}
 		$pair->add($l);
 
+		if ($control instanceof CKEditor) {
+			$controlContainer = $this->wrappers['control']['container'];
+			$this->wrappers['control']['container'] = 'div class=col-sm-10';
+		}
+
 		/** @var Html $controlPart */
 		$controlPart = $this->renderControl($control);
+
+		if ($control instanceof CKEditor) {
+			$this->wrappers['control']['container'] = $controlContainer;
+		}
+
 		if ($control instanceof Controls\CheckboxList || $control instanceof Controls\RadioList) {
 			foreach ($controlPart->getChildren() as & $item) {
 				$class = $control->getControlPrototype()->type . '-inline';
