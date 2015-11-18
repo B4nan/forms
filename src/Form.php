@@ -114,7 +114,7 @@ class Form extends NForm
 	 */
 	public function addSubmit($name, $caption = NULL)
 	{
-		if (self::getOption('spamProtection')) {
+		if (self::getOption('spamProtection') && ! isset($this['website_'])) {
 			$noSpam = $this->addText('website_', 'Website')
 							->addRule(Form::BLANK, 'You are a spambot!')
 							->setOmitted();
