@@ -39,4 +39,4 @@ class CKEditorTest extends TestCase
 }
 
 // run test
-(new CKEditorTest)->run();
+run(new CKEditorTest);
