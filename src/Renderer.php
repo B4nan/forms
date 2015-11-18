@@ -30,7 +30,7 @@ class Renderer extends DefaultFormRenderer
 		$this->wrappers['control']['description'] = 'span class=help-inline';
 		$this->wrappers['control']['errorcontainer'] = 'span class=help-inline';
 
-		if ($form::getRenderColonSuffix()) {
+		if ($form::getOption('renderColonSuffix')) {
 			$this->wrappers['label']['suffix'] = ':';
 		}
 	}

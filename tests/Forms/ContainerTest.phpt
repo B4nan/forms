@@ -6,6 +6,7 @@ use Bargency\Forms\Controls\BooleanInput;
 use Bargency\Forms\Controls\EditableSelectBox;
 use Bargency\Forms\Controls\PhoneInput;
 use Bargency\Forms\Controls\UrlInput;
+use Bargency\Forms\DI\FormsExtension;
 use Bargency\Forms\Form;
 use Bargency\Forms\Container;
 use Bargency\Forms\Controls\DatePicker;
@@ -29,6 +30,12 @@ require __DIR__ . '/../bootstrap.php';
  */
 class ContainerTest extends TestCase
 {
+
+	public function setUp()
+	{
+		$e = new FormsExtension;
+		Form::setConfig($e->defaults);
+	}
 
 	public function testFormControlsAdding()
 	{
@@ -97,4 +104,4 @@ class ContainerTest extends TestCase
 }
 
 // run test
-(new ContainerTest)->run();
+run(new ContainerTest);

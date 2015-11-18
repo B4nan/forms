@@ -36,19 +36,16 @@ class Container extends NContainer
 	/**
 	 * @param  string  control name
 	 * @param  string  caption
-	 * @param  string  secret used for spam protection
 	 * @return \Nette\Forms\Controls\SubmitButton
 	 */
-	public function addSubmit($name, $caption = NULL, $secret = 'nospam')
+	public function addSubmit($name, $caption = NULL)
 	{
-		if (Form::isSpamProtection()) {
-			$label = $this->translator->translate('Fill in "%s"', $secret);
-			$noSpam = $this->addText('nospam', $label)
-						   ->addRule(Form::FILLED, 'You are a spambot!')
-						   ->addRule(Form::EQUAL, 'You are a spambot!', $secret);
-
-			$noSpam->labelPrototype->class('nospam');
-			$noSpam->controlPrototype->class('nospam');
+		if (Form::getOption('spamProtection')) {
+			$noSpam = $this->addText('website_', 'Website')
+					->addRule(Form::BLANK, 'You are a spambot!')
+					->setOmitted();
+			$noSpam->getControlPrototype()->class('hidden');
+			$noSpam->getLabelPrototype()->class('hidden');
 		}
 
 		$control = parent::addSubmit($name, $caption);
@@ -71,13 +68,16 @@ class Container extends NContainer
 	/**
 	 * Adds a boolean picker
 	 *
-	 * @param string	control name
-	 * @param string	label
+	 * @param string $name
+	 * @param string $label
+	 * @param bool $default
 	 * @return Controls\BooleanInput
 	 */
-	public function addBoolean($name, $label = NULL)
+	public function addBoolean($name, $label = NULL, $default = NULL)
 	{
-		return $this[$name] = new Controls\BooleanInput($label);
+		$c = new Controls\BooleanInput($label);
+		$c->value = $default;
+		return $this[$name] = $c;
 	}
 
 	/**

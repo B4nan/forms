@@ -14,6 +14,7 @@ use Bargency\Forms\Controls\PhoneInput;
 use Bargency\Forms\Controls\Redactor;
 use Bargency\Forms\Controls\TagInput;
 use Bargency\Forms\Controls\UrlInput;
+use Bargency\Forms\DI\FormsExtension;
 use Nette\Forms\Controls\SubmitButton;
 use Nette\Forms\Controls\TextInput;
 use Nette\Utils\Html;
@@ -33,7 +34,8 @@ class FormTest extends TestCase
 
 	public function setUp()
 	{
-		// no setup
+		$e = new FormsExtension;
+		Form::setConfig($e->defaults);
 	}
 
 	public function testFormControlsAdding()

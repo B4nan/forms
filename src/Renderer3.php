@@ -75,7 +75,7 @@ class Renderer3 extends DefaultFormRenderer
 	{
 		$pair = $this->getWrapper('pair container');
 		$l = $this->renderLabel($control);
-		if (Form::getRenderColonSuffix()) {
+		if (Form::getOption('renderColonSuffix')) {
 			$l= Nette\Utils\Strings::replace($l, '/<\/label>/i', ':</label>');
 		}
 		$pair->add($l);
