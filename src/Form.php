@@ -200,6 +200,17 @@ class Form extends NForm
 	}
 
 	/**
+	 * add CKEditor js
+	 *
+	 * @param string $name
+	 * @param string $label
+	 */
+	public function addCKEditor($name, $label = NULL)
+	{
+		return $this[$name] = new Controls\CKEditor($label);
+	}
+
+	/**
 	 *
 	 * add datetime
 	 *
