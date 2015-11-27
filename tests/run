@@ -7,7 +7,7 @@ echo checking php syntax
     --exclude ./../log \
     ./..
 
-rm -rf temp/*
+rm -rf tmp/*
 
 if [ "$1" == "cov" -a -f coverage.dat ]
 then
@@ -32,7 +32,7 @@ then
 	 	-o tap | tee results.txt
 	if grep -q 'not ok' results.txt
 	then
-		rm -rf temp/*
+		rm -rf tmp/*
 		rm results.txt
 		echo "FAILED"
 		exit 1
@@ -44,4 +44,4 @@ else
 	./../vendor/bin/tester -j 30 -c ./config/php.ini -s .
 fi
 
-rm -rf temp/*
+rm -rf tmp/*
