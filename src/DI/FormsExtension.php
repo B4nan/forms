@@ -4,11 +4,13 @@ namespace Bargency\Forms\DI;
 
 use Bargency\Forms\Container;
 use Bargency\Forms\Controls\DateTimePicker;
+use Bargency\Forms\Controls\MultiUpload\Uploader;
 use Bargency\Forms\Controls\TagInput;
 use Bargency\Forms\Form;
 use Bargency\Forms\FormMacros3;
 use Bargency\Forms\Renderer3;
 use Kdyby\Replicator;
+use Nette\DI\ServiceDefinition;
 use Nette\Forms\Validator;
 use Nette\PhpGenerator\ClassType;
 use Nette\Configurator;
@@ -42,6 +44,8 @@ class FormsExtension extends CompilerExtension
 		$engine = $builder->getDefinition('nette.latteFactory');
 		$install = $config['macros'] . '::install';
 		$engine->addSetup($install . '(?->getCompiler())', ['@self']);
+		$builder->addDefinition($this->prefix('forms'))
+				->setClass(Uploader::class);
 	}
 
 	/**
