@@ -113,7 +113,18 @@ class Uploader extends Object
 		if (! $chunks || $chunk === $chunks - 1) {
 			rename("{$filePath}.part", $filePath);
 			$this->cleanTempDir();
-			$onSuccess(new Upload($token, $fileToken, $filePath, $fileName));
+			if (! $file) {
+				$file = ['name' => $fileName];
+			} else {
+				$file = [
+					'name' => $file->name,
+					'type' => $file->contentType,
+					'size' => $file->size,
+					'tmp_name' => $filePath,
+					'error' => $file->error,
+				];
+			}
+			$onSuccess(new Upload($token, $fileToken, $filePath, $file));
 		}
 	}
 

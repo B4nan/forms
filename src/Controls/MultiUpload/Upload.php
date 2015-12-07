@@ -2,20 +2,16 @@
 
 namespace Bargency\Forms\Controls\MultiUpload;
 
-use Nette\Object;
-use Nette\Utils\FileSystem;
+use Nette\Http\FileUpload;
 
 /**
  * @author Martin Adámek <adamek@bargency.com>
  */
-class Upload extends Object
+class Upload extends FileUpload
 {
 
 	/** @var string */
 	private $filename;
-
-	/** @var string */
-	private $name;
 
 	/** @var string */
 	private $token;
@@ -24,26 +20,17 @@ class Upload extends Object
 	private $queueToken;
 
 	/**
-	 * @param $queueToken
+	 * @param string $queueToken
 	 * @param string $token
 	 * @param string $filename
-	 * @param string $name
+	 * @param array $file
 	 */
-	public function __construct($queueToken, $token, $filename, $name = NULL)
+	public function __construct($queueToken, $token, $filename, array $file = NULL)
 	{
 		$this->queueToken = $queueToken;
 		$this->token = $token;
 		$this->filename = $filename;
-		$this->name = $name;
-	}
-
-	/**
-	 * Get name provided by client.
-	 * @return string
-	 */
-	public function getName()
-	{
-		return isset($this->name) ? $this->name : basename($this->filename);
+		parent::__construct($file);
 	}
 
 	/**
@@ -68,23 +55,6 @@ class Upload extends Object
 	public function getFilename()
 	{
 		return $this->filename;
-	}
-
-	/**
-	 * Move file to another location.
-	 * @param string $location
-	 * @return Upload
-	 */
-	public function move($location)
-	{
-		FileSystem::createDir(dirname($location));
-		FileSystem::delete($location);
-		if (!call_user_func(is_uploaded_file($this->filename) ? 'move_uploaded_file' : 'rename', $this->filename, $location)) {
-			throw new \Nette\InvalidStateException("Unable to move uploaded file '$this->filename' to '$location'.");
-		}
-		chmod($location, 0666);
-		$this->filename = $location;
-		return $this;
 	}
 
 }
