@@ -3,6 +3,8 @@
 namespace Bargency\Forms;
 
 use Bargency\Forms\Controls\HiddenField;
+use Bargency\Forms\Controls\TagInput;
+use Kdyby\Replicator\Container as ReplicatorContainer;
 use Nette\Application\UI\Form as NForm;
 use Nette\Application\UI\Presenter;
 use Nette\ComponentModel\IContainer;
@@ -13,6 +15,7 @@ use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
 
 /**
+ * @method ReplicatorContainer addDynamic(string $name, callable $factory, int $createDefault = 0, bool $forceDefault = FALSE)
  * @author Martin Adámek <adamek@bargency.com>
  */
 class Form extends NForm
@@ -171,15 +174,14 @@ class Form extends NForm
 	}
 
 	/**
-	 * @param Form $form
 	 * @param string $name
 	 * @param string $label
-	 * @param array $suggest
+	 * @param bool $returnString
 	 * @return TagInput provides fluent interface
 	 */
-	public function addTag($name, $label = NULL)
+	public function addTag($name, $label = NULL, $returnString = FALSE)
 	{
-		$this[$name] = new Controls\TagInput($label);
+		$this[$name] = new Controls\TagInput($label, $returnString);
 		$this[$name]->renderName = 'tagInputSuggest' . ucfirst($name);
 		return $this[$name];
 	}
@@ -189,6 +191,7 @@ class Form extends NForm
 	 *
 	 * @param string $name
 	 * @param string $label
+	 * @return Controls\Redactor
 	 */
 	public function addRedactor($name, $label = NULL)
 	{
@@ -200,6 +203,7 @@ class Form extends NForm
 	 *
 	 * @param string $name
 	 * @param string $label
+	 * @return Controls\CKEditor
 	 */
 	public function addCKEditor($name, $label = NULL)
 	{
@@ -238,7 +242,7 @@ class Form extends NForm
 	 * add date
 	 *
 	 * @param string $name
-	 * @param strign $label
+	 * @param string $label
 	 * @param string $dateFormat
 	 * @return Controls\DatePicker
 	 */
@@ -251,7 +255,7 @@ class Form extends NForm
 	 * add date time picker
 	 *
 	 * @param string $name
-	 * @param strign $label
+	 * @param string $label
 	 * @return \Nette\Forms\Controls\TextInput
 	 */
 	public function addTime($name, $label = NULL)
@@ -278,11 +282,11 @@ class Form extends NForm
 	/**
 	 * Adds a number input control to the form.
 	 *
-	 * @param string	control name
-	 * @param string	label
-	 * @param int   incremental number
-	 * @param int   minimal value
-	 * @param int   maximal value
+	 * @param string $name
+	 * @param string $label
+	 * @param int $step incremental number
+	 * @param int $min minimal value
+	 * @param int $max maximal value
 	 * @return \Nette\Forms\Controls\TextInput
 	 */
 	public function addNumber($name, $label = NULL, $step = 1, $min = NULL, $max = NULL)
@@ -309,10 +313,10 @@ class Form extends NForm
 	/**
 	 * Adds a floating point number input control to the form.
 	 *
-	 * @param string	control name
-	 * @param string	label
-	 * @param int   minimal value
-	 * @param int   maximal value
+	 * @param string $name
+	 * @param string $label
+	 * @param int $min minimal value
+	 * @param int $max maximal value
 	 * @return \Nette\Forms\Controls\TextInput
 	 */
 	public function addFloat($name, $label = NULL, $min = NULL, $max = NULL)
@@ -376,11 +380,11 @@ class Form extends NForm
 	/**
 	 * Adds a range input control to the form.
 	 *
-	 * @param string	control name
-	 * @param string	label
-	 * @param int   incremental number
-	 * @param int   minimal value
-	 * @param int   maximal value
+	 * @param string $name
+	 * @param string $label
+	 * @param int $step incremental number
+	 * @param int $min minimal value
+	 * @param int $max maximal value
 	 * @return \Nette\Forms\Controls\TextInput
 	 */
 	public function addRange($name, $label = NULL, $step = 1, $min = NULL, $max = NULL)

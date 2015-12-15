@@ -2,18 +2,19 @@
 
 namespace Bargency\Forms\Controls;
 
-use Nette\Forms\Form,
-	Nette\Forms\IControl,
-	Nette\Forms\Controls\TextInput,
-	Nette\Forms\Controls\TextBase,
-	Nette\Utils\Strings,
-	Nette\Application\Responses\JsonResponse;
+use Nette\Application\Responses\JsonResponse;
+use Nette\Forms\Controls\TextBase;
+use Nette\Forms\Controls\TextInput;
+use Nette\Forms\Form;
+use Nette\Forms\IControl;
+use Nette\InvalidArgumentException;
+use Nette\Utils\Strings;
 
 /**
  * Tag Input for html forms
  *
  * @author Martin Adamek <adamek@bargency.com>
- * @copyright Royal Design s.r.o. 2012
+ * @copyright Bargency s.r.o.
  */
 class TagInput extends TextInput
 {
@@ -31,24 +32,27 @@ class TagInput extends TextInput
 	protected $payloadLimit = 5;
 
 	/** @var string regex */
-	protected $delimiter = '[\s,]+';
+	protected $delimiter = '[\s;]+';
 
 	/** @var string */
-	protected $joiner = ', ';
+	protected $joiner = ';';
 
 	/** @var callback returning array */
 	protected $suggestCallback;
 
+	/** @var bool */
+	private $returnString;
+
 	/**
-	 * @param  string  control name
-	 * @param  string  label
-	 * @param  int  width of the control
-	 * @param  int  maximum number of characters the user may enter
+	 * TagInput constructor.
+	 * @param string $label
+	 * @param bool $returnString
 	 */
-	public function __construct($label = NULL, $cols = NULL, $maxLength = NULL)
+	public function __construct($label = NULL, $returnString = FALSE)
 	{
-		parent::__construct($label, $cols, $maxLength);
+		parent::__construct($label);
 		$this->control->class[] = 'tags';
+		$this->returnString = $returnString;
 	}
 
 	/**
@@ -62,7 +66,7 @@ class TagInput extends TextInput
 	}
 
 	/**
-	 * @param string $delimiter
+	 * @param string $joiner
 	 * @return TagInput provides fluent interface
 	 */
 	public function setJoiner($joiner)
@@ -76,18 +80,28 @@ class TagInput extends TextInput
 	 */
 	public function getValue()
 	{
-		// temporarily disable filters
-		$filters = $this->filters;
-		$this->filters = array();
+		// temporarily disable rules
+//		$rules = $this->rules;
+//		$this->rules = array();
+//
+		$val = parent::getValue();
 
-		$res = Strings::split(parent::getValue(), "\x01" . $this->delimiter . "\x01");
-		$this->filters = $filters;
+		if ($this->returnString) {
+			return $val;
+		}
 
-		foreach ($res as &$tag) {
-			foreach ($this->filters as $filter) {
+		if (! $val) {
+			return [];
+		}
+
+		$res = Strings::split($val, "\x01" . $this->delimiter . "\x01");
+//		$this->rules = $rules;
+
+		foreach ($res as & $tag) {
+			foreach ($this->rules as $filter) {
 				$tag = $filter($tag);
 			}
-			if (!$tag) {
+			if (! $tag) {
 				unset($tag);
 			}
 		}
@@ -149,7 +163,7 @@ class TagInput extends TextInput
 	public function setDefaultValue($value)
 	{
 		if (!is_array($value)) {
-			throw new \Nette\InvalidArgumentException("Invalid argument type passed to " . __METHOD__ . ", expected array.");
+			throw new InvalidArgumentException("Invalid argument type passed to " . __METHOD__ . ", expected array.");
 		}
 		parent::setDefaultValue(implode($this->joiner, $value));
 		return $this;
@@ -162,7 +176,7 @@ class TagInput extends TextInput
 	public function setPayloadLimit($limit)
 	{
 		if ($limit < 0) {
-			throw new \Nette\InvalidArgumentException("Invalid limit, expected positive integer.");
+			throw new InvalidArgumentException("Invalid limit, expected positive integer.");
 		}
 
 		$this->payloadLimit = $limit;
@@ -171,17 +185,18 @@ class TagInput extends TextInput
 
 	/**
 	 * Adds a validation rule.
-	 * @param  mixed      rule type
-	 * @param  string     message to display for invalid data
-	 * @param  mixed      optional rule arguments
-	 * @return FormControl  provides a fluent interface
+	 *
+	 * @param string $operation
+	 * @param null $message
+	 * @param null $arg
+	 * @return \Nette\Forms\Controls\BaseControl
 	 */
 	public function addRule($operation, $message = NULL, $arg = NULL)
 	{
-		switch($operation) {
+		switch ($operation) {
 			case Form::EQUAL:
-				if (!is_array($arg)) {
-					throw new \Nette\InvalidArgumentException(__METHOD__ . '(' . $operation . ') must be compared to array.');
+				if (! is_array($arg)) {
+					throw new InvalidArgumentException(__METHOD__ . '(' . $operation . ') must be compared to array.');
 				}
 		}
 
@@ -189,8 +204,8 @@ class TagInput extends TextInput
 	}
 
 	/**
-	 * @param \Nette\Application\UI\Presenter presenter
-	 * @param string presenter
+	 * @param \Nette\Application\UI\Presenter $presenter
+	 * @param $filter
 	 */
 	public function renderResponse($presenter, $filter)
 	{
@@ -209,11 +224,7 @@ class TagInput extends TextInput
 		$presenter->sendResponse(new JsonResponse($data));
 	}
 
-
-
 	/********************* validation *********************/
-
-
 
 	/**
 	 * Equal validator: are control's value and second parameter equal?
@@ -229,8 +240,6 @@ class TagInput extends TextInput
 		return $value === $arg;
 	}
 
-
-
 	/**
 	 * Filled validator: is control filled?
 	 * @param  IControl
@@ -240,8 +249,6 @@ class TagInput extends TextInput
 	{
 		return count($control->getValue()) !== 0;
 	}
-
-
 
 	/**
 	 * Min-length validator: has control's value minimal length?
@@ -254,8 +261,6 @@ class TagInput extends TextInput
 		return count($control->getValue()) >= $length;
 	}
 
-
-
 	/**
 	 * Max-length validator: is control's value length in limit?
 	 * @param  TextBase
@@ -266,8 +271,6 @@ class TagInput extends TextInput
 	{
 		return count($control->getValue()) <= $length;
 	}
-
-
 
 	/**
 	 * Length validator: is control's value length in range?
@@ -284,53 +287,6 @@ class TagInput extends TextInput
 		return ($range[0] === NULL || $len >= $range[0]) && ($range[1] === NULL || $len <= $range[1]);
 	}
 
-
-
-	/**
-	 * Email validator: is control's value valid email address?
-	 * @param  TextBase
-	 * @return bool
-	 */
-	public static function validateEmail(TextBase $control)
-	{
-		throw new \LogicException(':EMAIL validator is not applicable to TagInput.');
-	}
-
-
-
-	/**
-	 * URL validator: is control's value valid URL?
-	 * @param  TextBase
-	 * @return bool
-	 */
-	public static function validateUrl(TextBase $control)
-	{
-		throw new \LogicException(':URL validator is not applicable to TagInput.');
-	}
-
-
-
-	/** @deprecated */
-	public static function validateRegexp(TextBase $control, $regexp)
-	{
-		throw new \LogicException(':REGEXP validator is not applicable to TagInput.');
-	}
-
-
-
-	/**
-	 * Regular expression validator: matches control's value regular expression?
-	 * @param  TextBase
-	 * @param  string
-	 * @return bool
-	 */
-	public static function validatePattern(TextBase $control, $pattern)
-	{
-		throw new \LogicException(':PATTERN validator is not applicable to TagInput.');
-	}
-
-
-
 	/**
 	 * Integer validator: is each value of tag of control decimal number?
 	 * @param  TextBase
@@ -345,8 +301,6 @@ class TagInput extends TextInput
 		}
 		return TRUE;
 	}
-
-
 
 	/**
 	 * Float validator: is each value of tag of control value float number?
@@ -363,21 +317,6 @@ class TagInput extends TextInput
 		return TRUE;
 	}
 
-
-
-	/**
-	 * Range validator: is a control's value number in specified range?
-	 * @param  TextBase
-	 * @param  array  min and max value pair
-	 * @return bool
-	 */
-	public static function validateRange(IControl $control, $range)
-	{
-		throw new \LogicException(':RANGE validator is not applicable to TagInput.');
-	}
-
-
-
 	/**
 	 * Uniqueness validator: is each value of tag of control unique?
 	 * @param  TagInput
@@ -387,8 +326,6 @@ class TagInput extends TextInput
 	{
 		return count(array_unique($control->getValue())) === count($control->getValue());
 	}
-
-
 
 	/**
 	 * Are all tags from suggest?
