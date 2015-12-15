@@ -71,7 +71,7 @@ class Uploader extends Object
 		$fileName = $this->request->getPost('name');
 		if (! $fileName && count($this->request->getFiles())) {
 			$fileName = $this->request->getFile('file')->name;
-		} else {
+		} elseif (! $fileName) {
 			$fileName = uniqid("file_");
 		}
 
@@ -82,7 +82,7 @@ class Uploader extends Object
 		$chunks = (int) $this->request->getPost('chunks');
 
 		// Open temp file
-		if (! $out = @fopen("{$filePath}.part", $chunks ? "ab" : "wb")) {
+		if (! $out = @fopen("{$filePath}.part", $chunks > 1 ? "ab" : "wb")) {
 			throw new Exception('Failed to open output stream.', 102);
 		}
 
@@ -110,14 +110,14 @@ class Uploader extends Object
 		@fclose($in);
 
 		// Check if file has been uploaded
-		if (! $chunks || $chunk === $chunks - 1) {
+		if ($chunks < 2 || $chunk === $chunks - 1) {
 			rename("{$filePath}.part", $filePath);
 			$this->cleanTempDir();
 			if (! $file) {
 				$file = ['name' => $fileName];
 			} else {
 				$file = [
-					'name' => $file->name,
+					'name' => $fileName,
 					'type' => $file->contentType,
 					'size' => $file->size,
 					'tmp_name' => $filePath,

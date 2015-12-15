@@ -74,7 +74,6 @@ class MultiUpload extends UploadControl
 		$this->control = Html::el("div");
 		$this->maxFileSize = $this->parseIniSize(ini_get('upload_max_filesize'));
 		$this->token = Random::generate(20);
-		bd($this->token);
 	}
 
 	/**
