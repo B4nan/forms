@@ -155,6 +155,7 @@ class Form extends NForm
 		} else {
 			$control = parent::addButton('cancel', 'Cancel');
 		}
+		$control->setOmitted();
 		$control->controlPrototype->class[] = 'btn btn-medium';
 
 		return $control;
