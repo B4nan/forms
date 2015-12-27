@@ -10,7 +10,6 @@ use Bargency\Forms\Form;
 use Bargency\Forms\FormMacros3;
 use Bargency\Forms\Renderer3;
 use Kdyby\Replicator;
-use Nette\DI\ServiceDefinition;
 use Nette\Forms\Validator;
 use Nette\PhpGenerator\ClassType;
 use Nette\Configurator;
