@@ -131,12 +131,6 @@ class TagInput extends TextInput
 		}
 
 		$container->add($control);
-		$component = '';
-		$parent = $this->form->parent;
-		while (!($parent instanceof \Nette\Application\IPresenter)) {
-			$component .= $parent->name . '-';
-			$parent = $parent->parent;
-		}
 
 		return $container;
 	}

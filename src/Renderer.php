@@ -59,7 +59,7 @@ class Renderer extends DefaultFormRenderer
 			if ($control instanceof Controls\Button) {
 				$control->getControlPrototype()->addClass(!$usedPrimary ? 'btn btn-success' : 'btn');
 				$usedPrimary = TRUE;
-			} elseif ($control instanceof Controls\CheckboxList || $control instanceof Controls\RadioList) {
+			} elseif ($control instanceof Controls\RadioList) {
 				$control->getSeparatorPrototype()->setName(NULL);
 				$control->getItemLabelPrototype()->addClass($control->controlPrototype->type);
 			}

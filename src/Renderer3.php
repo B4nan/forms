@@ -57,7 +57,7 @@ class Renderer3 extends DefaultFormRenderer
 				$usedPrimary = TRUE;
 			} elseif ($control instanceof Controls\Checkbox) {
 				$control->getLabelPrototype()->addClass($control->getControlPrototype()->type);
-			} elseif ($control instanceof Controls\CheckboxList || $control instanceof Controls\RadioList) {
+			} elseif ($control instanceof Controls\RadioList) {
 				$control->getItemLabelPrototype()->addClass($control->getControlPrototype()->type . '-inline');
 				$control->getSeparatorPrototype()->setName(NULL);
 			} else {

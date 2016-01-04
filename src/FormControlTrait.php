@@ -5,13 +5,8 @@ namespace Bargency\Forms;
 use Bargency\Forms\Controls\HiddenField;
 use Bargency\Forms\Controls\TagInput;
 use Kdyby\Replicator\Container as ReplicatorContainer;
-use Nette\Application\UI\Form as NForm;
-use Nette\Application\UI\Presenter;
-use Nette\ComponentModel\IContainer;
 use Nette\Forms\Controls\BaseControl;
 use Nette\Forms\Controls\SubmitButton;
-use Nette\Forms\Validator;
-use Nette\InvalidStateException;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
 
@@ -40,29 +35,6 @@ trait FormControlTrait
 		$control = parent::addMultiSelect($name, $label, $items, $size);
 		$control->checkAllowedValues = FALSE;
 		return $control;
-	}
-
-	/**
-	 * removes CSRF protection token
-	 */
-	public function removeProtection()
-	{
-		unset($this[self::PROTECTOR_ID]);
-	}
-
-	/**
-	 * @param \Nette\Application\IPresenter $presenter
-	 */
-	protected function attached($presenter)
-	{
-		parent::attached($presenter);
-
-		if (isset($presenter->translator)) {
-			$this->setTranslator($presenter->translator);
-		}
-
-		$macros = self::getOption('macros');
-		$macros::setFormClasses($this);
 	}
 
 	/**
@@ -261,7 +233,7 @@ trait FormControlTrait
 	{
 		$item = $this->addText($name, $label);
 		$item->setAttribute('step', $step)->setAttribute('type', 'number')
-				->addCondition(self::FILLED)->addRule(self::NUMERIC);
+				->addCondition(Form::FILLED)->addRule(Form::NUMERIC);
 		$range = [NULL, NULL];
 		if ($min !== NULL) {
 			$item->setAttribute('min', $min);
@@ -272,7 +244,7 @@ trait FormControlTrait
 			$range[1] = $max;
 		}
 		if ($range != [NULL, NULL]) {
-			$item->addCondition(self::FILLED)->addRule(self::RANGE, NULL, $range);
+			$item->addCondition(Form::FILLED)->addRule(Form::RANGE, NULL, $range);
 		}
 
 		return $item;
@@ -290,7 +262,7 @@ trait FormControlTrait
 	public function addFloat($name, $label = NULL, $min = NULL, $max = NULL)
 	{
 		$item = $this->addText($name, $label);
-		$item->addCondition(self::FILLED)->addRule(self::FLOAT);
+		$item->addCondition(Form::FILLED)->addRule(Form::FLOAT);
 		$range = [NULL, NULL];
 		if ($min !== NULL) {
 			$item->setAttribute('min', $min);
@@ -301,7 +273,7 @@ trait FormControlTrait
 			$range[1] = $max;
 		}
 		if ($range != [NULL, NULL]) {
-			$item->addCondition(self::FILLED)->addRule(self::RANGE, NULL, $range);
+			$item->addCondition(Form::FILLED)->addRule(Form::RANGE, NULL, $range);
 		}
 
 		return $item;
@@ -376,27 +348,6 @@ trait FormControlTrait
 	}
 
 	/**
-	 * @param bool $asArray values as an array?
-	 * @return ArrayHash|array
-	 */
-	public function getValues($asArray = FALSE)
-	{
-		$values = parent::getValues($asArray);
-
-		foreach ($values as $key => &$value) {
-			if ($value
-				&& isset($this[$key]->control)
-				&& isset($this[$key]->control->attrs['type'])
-				&& $this[$key]->control->attrs['type'] === 'datetime'
-			) {
-				$value = new DateTime($value);
-			}
-		}
-
-		return $values;
-	}
-
-	/**
 	 * resets all values
 	 * @return self
 	 */
@@ -413,26 +364,6 @@ trait FormControlTrait
 		}
 
 		return $this;
-	}
-
-	/**
-	 * Fucking exception in fucking ChoiceControl::setValue() made me write this awful shitty fucking method.
-	 *
-	 * @param $values
-	 * @author fprochazka
-	 */
-	public function forceSetValues($values)
-	{
-		$refl = new \ReflectionProperty(\Nette\Forms\Form::class, 'httpData');
-		$refl->setAccessible(TRUE);
-		$refl->setValue($this, (array) $values);
-
-		/** @var BaseControl $control */
-		foreach ($this->getControls() as $control) {
-			if (! $control->isDisabled()) {
-				$control->loadHttpData();
-			}
-		}
 	}
 
 }

@@ -158,7 +158,7 @@ class MultiUpload extends UploadControl
 	 */
 	public function __destruct()
 	{
-		if ($this->form->isSubmitted()) {
+		if ($this->form->isAnchored() && $this->form->isSubmitted()) {
 			self::$uploader->cleanTempDir();
 		}
 	}

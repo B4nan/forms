@@ -17,7 +17,6 @@ final class Validators
 	 *
 	 * @param IControl $control
 	 * @return bool
-	 * @internal param $IFormControl
 	 */
 	public static function validateFilled(IControl $control)
 	{
@@ -29,10 +28,8 @@ final class Validators
 	 * FileSize validator: is file size in limit?
 	 *
 	 * @param UploadControl $control
-	 * @param $limit
+	 * @param int $limit
 	 * @return bool
-	 * @internal param $MultiUpload
-	 * @internal param file $int size limit
 	 */
 	public static function validateFileSize(UploadControl $control, $limit)
 	{
@@ -50,25 +47,23 @@ final class Validators
 	 * @param UploadControl $control
 	 * @param $mimeType
 	 * @return bool
-	 * @internal param $FileUpload
-	 * @internal param array|string $mime type
 	 */
 	public static function validateMimeType(UploadControl $control, $mimeType)
 	{
 		return (bool) count(array_filter(
 			$control->getValue(), function ($file) use ($mimeType) {
-			if ($file instanceof FileUpload) {
-				$type = strtolower($file->getContentType());
-				$mimeTypes = is_array($mimeType) ? $mimeType : explode(',', $mimeType);
-				if (in_array($type, $mimeTypes, TRUE)) {
-					return TRUE;
+				if ($file instanceof FileUpload) {
+					$type = strtolower($file->getContentType());
+					$mimeTypes = is_array($mimeType) ? $mimeType : explode(',', $mimeType);
+					if (in_array($type, $mimeTypes, TRUE)) {
+						return TRUE;
+					}
+					if (in_array(preg_replace('#/.*#', '/*', $type), $mimeTypes, TRUE)) {
+						return TRUE;
+					}
 				}
-				if (in_array(preg_replace('#/.*#', '/*', $type), $mimeTypes, TRUE)) {
-					return TRUE;
-				}
+				return FALSE;
 			}
-			return FALSE;
-		}
 		));
 	}
 

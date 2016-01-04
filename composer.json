@@ -31,7 +31,8 @@
 		"nette/tester": "@dev",
 		"kdyby/tester-extras": "@dev",
 		"jakub-onderka/php-parallel-lint": "0.*",
-		"jakub-onderka/php-console-highlighter": "0.*"
+		"jakub-onderka/php-console-highlighter": "0.*",
+		"mockery/mockery": "^0.9.4"
 	},
 	"autoload": {
 		"psr-4": {

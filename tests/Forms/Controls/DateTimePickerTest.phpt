@@ -2,6 +2,7 @@
 
 namespace Bargency\Tests\Forms\Controls;
 
+use Bargency\Forms\Controls\DateTimePicker;
 use Tester\TestCase,
 	Tester\Assert,
 	Tester\DomQuery;
@@ -20,7 +21,7 @@ class DateTimePickerTest extends TestCase
 
 	public function setUp()
 	{
-		$this->control = new \Bargency\Forms\Controls\DateTimePicker;
+		$this->control = new DateTimePicker;
 	}
 
 	public function getValues()
@@ -42,6 +43,10 @@ class DateTimePickerTest extends TestCase
 	{
 		$this->control->setValue($value);
 		Assert::equal($expected, $this->control->getValue());
+		$this->control->setDate($value);
+		Assert::equal($expected, $this->control->getValue());
+		$this->control->setTime($value);
+		Assert::equal($expected, $this->control->getValue());
 	}
 
 	public function testIsFilled()
@@ -51,6 +56,20 @@ class DateTimePickerTest extends TestCase
 		Assert::true($this->control->isFilled());
 		$this->control->value = '';
 		Assert::false($this->control->isFilled());
+	}
+
+	public function testRequired()
+	{
+		Assert::false($this->control->isRequired());
+		$this->control->setRequired();
+		Assert::true($this->control->isRequired());
+		$this->control->setRequired(FALSE);
+		Assert::false($this->control->isRequired());
+	}
+
+	public function testLabelPart()
+	{
+		Assert::null($this->control->getLabelPart());
 	}
 
 	public function testValidate()

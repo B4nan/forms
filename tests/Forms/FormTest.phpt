@@ -4,6 +4,7 @@ namespace Bargency\Tests\Forms;
 
 use Bargency\Forms\Container;
 use Bargency\Forms\Controls\BooleanInput;
+use Bargency\Forms\Controls\CKEditor;
 use Bargency\Forms\Controls\DatePicker;
 use Bargency\Forms\Controls\DateRangePicker;
 use Bargency\Forms\Controls\DateTimePicker;
@@ -15,6 +16,10 @@ use Bargency\Forms\Controls\Redactor;
 use Bargency\Forms\Controls\TagInput;
 use Bargency\Forms\Controls\UrlInput;
 use Bargency\Forms\DI\FormsExtension;
+use Nette\Forms\Controls\Button;
+use Nette\Forms\Controls\CsrfProtection;
+use Nette\Forms\Controls\MultiSelectBox;
+use Nette\Forms\Controls\SelectBox;
 use Nette\Forms\Controls\SubmitButton;
 use Nette\Forms\Controls\TextInput;
 use Nette\Utils\Html;
@@ -41,11 +46,26 @@ class FormTest extends TestCase
 	public function testFormControlsAdding()
 	{
 		$form = new Form;
+		$form2 = new Form;
 
+		$btn = $form->addButton('btn');
+		Assert::type(Button::class, $btn);
+		$cancel = $form->addCancel();
+		Assert::type(Button::class, $cancel);
+		$cancel2 = $form2->addCancel(function() {
+			// callback
+		});
+		Assert::type(Button::class, $cancel2);
+		$select = $form->addSelect('select', NULL, [1, 2, 3]);
+		Assert::type(SelectBox::class, $select);
+		$select2 = $form->addMultiSelect('select2', NULL, [1, 2, 3]);
+		Assert::type(MultiSelectBox::class, $select2);
 		$tag = $form->addTag('tag');
 		Assert::type(TagInput::class, $tag);
 		$redactor = $form->addRedactor('redactor');
 		Assert::type(Redactor::class, $redactor);
+		$ckeditor = $form->addCKEditor('ckeditor');
+		Assert::type(CKEditor::class, $ckeditor);
 		$dateTime = $form->addDateTime('dateTime');
 		Assert::type(DateTimePicker::class, $dateTime);
 		$dateRange = $form->addDateRange('dateRange');
@@ -75,8 +95,8 @@ class FormTest extends TestCase
 		Assert::type(Html::class, $form['hidden']->getControl());
 		$container = $form->addContainer('container');
 		Assert::type(Container::class, $container);
-//		$multiUpload = $form->addMultiUpload('multiUpload');
-//		Assert::type(MultiUpload::class, $multiUpload);
+		$multiUpload = $form->addMultiUpload('multiUpload');
+		Assert::type(MultiUpload::class, $multiUpload);
 	}
 
 	public function testResetValues()
@@ -104,7 +124,7 @@ class FormTest extends TestCase
 	public function testRemoveProtection()
 	{
 		$form = new Form;
-		Assert::type('\Nette\Forms\Controls\CsrfProtection', $form[Form::PROTECTOR_ID]);
+		Assert::type(CsrfProtection::class, $form[Form::PROTECTOR_ID]);
 
 		$form->removeProtection();
 		Assert::false(isset($form[Form::PROTECTOR_ID]));

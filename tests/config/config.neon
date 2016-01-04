@@ -3,6 +3,8 @@
 application:
 	scanDirs: false
 
+di:
+	accessors: true
 
 extensions:
 	bargencyForms: Bargency\Forms\DI\FormsExtension

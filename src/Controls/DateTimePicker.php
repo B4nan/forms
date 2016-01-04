@@ -73,6 +73,7 @@ class DateTimePicker extends \Nette\Forms\Controls\BaseControl
 	{
 		if ($value === NULL || $value === '') {
 			$this->date = NULL;
+			return $this;
 		} elseif (is_string($value) && strtotime($value)) {
 			$value = new \DateTime($value);
 		} elseif (!$value instanceof \DateTime) {
@@ -88,6 +89,7 @@ class DateTimePicker extends \Nette\Forms\Controls\BaseControl
 	{
 		if ($value === NULL || $value === '') {
 			$this->time = NULL;
+			return $this;
 		} elseif (is_string($value) && strtotime($value)) {
 			$value = new \DateTime($value);
 		} elseif (!$value instanceof \DateTime) {

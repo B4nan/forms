@@ -2,15 +2,16 @@
 
 namespace Bargency\Tests\Forms\Controls;
 
-use Tester\TestCase,
-	Tester\Assert,
-	Tester\DomQuery;
+use Bargency\Forms\Controls\TagInput;
+use Nette\Forms\Form;
+use Nette\Utils\Html;
+use Tester\TestCase;
+use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
 /**
  * @author Martin Adámek <adamek@bargency.com>
- * @skip
  */
 class TagInputTest extends TestCase
 {
@@ -19,21 +20,18 @@ class TagInputTest extends TestCase
 
 	public function setUp()
 	{
-		$this->control = new \Bargency\Forms\Controls\TagInput;
+		$this->control = new TagInput;
 	}
 
 	public function testGetControl()
 	{
-		$form = new \Nette\Forms\Form;
+		$form = new Form;
 		$form['redactor'] = $this->control;
 		$control = $this->control->getControl();
-		Assert::type('\Nette\Utils\Html', $control);
+		Assert::type(Html::class, $control);
 
-		echo $html = (string) $control;exit;
-
-		$dom = DomQuery::fromHtml($html);
-		Assert::true($dom->has('div.redactor_control'));
-		Assert::true($dom->has('textarea.redactor'));
+		$html = (string) $control;
+		Assert::type('string', $html);
 	}
 
 }
