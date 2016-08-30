@@ -1,8 +1,8 @@
 <?php
 
-namespace Bargency\Tests\Forms\Controls;
+namespace B4nan\Tests\Forms\Controls;
 
-use Bargency\Forms\Controls\MultiUpload\Upload;
+use B4nan\Forms\Controls\MultiUpload\Upload;
 use Tester\Assert;
 use Tester\TestCase;
 

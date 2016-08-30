@@ -1,8 +1,8 @@
 <?php
 
-namespace Bargency\Forms\Controls\MultiUpload;
+namespace B4nan\Forms\Controls\MultiUpload;
 
-use Bargency\Forms\Controls\MultiUpload;
+use B4nan\Forms\Controls\MultiUpload;
 use Exception;
 use Nette\Caching\Cache;
 use Nette\Caching\IStorage;

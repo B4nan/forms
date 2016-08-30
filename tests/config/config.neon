@@ -1,4 +1,4 @@
-# Bargency test config file
+# B4nan test config file
 
 application:
 	scanDirs: false
@@ -7,10 +7,10 @@ di:
 	accessors: true
 
 extensions:
-	bargencyForms: Bargency\Forms\DI\FormsExtension
+	bargencyForms: B4nan\Forms\DI\FormsExtension
 
 
 bargencyForms:
-	renderer: Bargency\Forms\Renderer
-	macros: Bargency\Forms\FormMacros
+	renderer: B4nan\Forms\Renderer
+	macros: B4nan\Forms\FormMacros
 	renderColonSuffix: FALSE

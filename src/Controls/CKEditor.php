@@ -1,6 +1,6 @@
 <?php
 
-namespace Bargency\Forms\Controls;
+namespace B4nan\Forms\Controls;
 
 use Nette\Forms\Controls\TextArea,
 	Nette\Utils\Html;

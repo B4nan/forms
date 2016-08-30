@@ -1,6 +1,6 @@
 <?php
 
-namespace Bargency\Forms\Controls;
+namespace B4nan\Forms\Controls;
 
 use Nette\Application\Responses\JsonResponse;
 use Nette\Forms\Controls\TextBase;
@@ -14,7 +14,7 @@ use Nette\Utils\Strings;
  * Tag Input for html forms
  *
  * @author Martin Adamek <adamek@bargency.com>
- * @copyright Bargency s.r.o.
+ * @copyright B4nan s.r.o.
  */
 class TagInput extends TextInput
 {

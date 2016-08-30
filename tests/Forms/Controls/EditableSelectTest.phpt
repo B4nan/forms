@@ -1,6 +1,6 @@
 <?php
 
-namespace Bargency\Tests\Forms\Controls;
+namespace B4nan\Tests\Forms\Controls;
 
 use Tester\TestCase,
 	Tester\Assert,
@@ -27,7 +27,7 @@ class EditableSelectTest extends TestCase
 
 	public function setUp()
 	{
-		$this->control = new \Bargency\Forms\Controls\EditableSelectBox('label', $this->items, 'other');
+		$this->control = new \B4nan\Forms\Controls\EditableSelectBox('label', $this->items, 'other');
 	}
 
 	public function getValues()

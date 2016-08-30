@@ -1,8 +1,8 @@
 <?php
 
-namespace Bargency\Forms;
+namespace B4nan\Forms;
 
-use Bargency\Forms\Controls\CKEditor;
+use B4nan\Forms\Controls\CKEditor;
 use Nette\Forms\Rendering\DefaultFormRenderer,
 	Nette\Forms\Controls,
 	Nette\Utils\Html,

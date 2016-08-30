@@ -1,6 +1,6 @@
 <?php
 
-namespace Bargency\Forms;
+namespace B4nan\Forms;
 
 use Nette,
 	Nette\Forms\Controls,
@@ -53,7 +53,7 @@ class FormMacros extends Nette\Bridges\FormsLatte\FormMacros
 		}
 		$node->tokenizer->reset();
 		return $writer->write(
-			'Bargency\Forms\FormMacros::renderFormBegin($form = $_form = '
+			'B4nan\Forms\FormMacros::renderFormBegin($form = $_form = '
 			. ($name[0] === '$' ? 'is_object(%node.word) ? %node.word : ' : '')
 			. '$_control[%node.word], %node.array)'
 		);

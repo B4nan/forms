@@ -1,6 +1,6 @@
 <?php
 
-namespace Bargency\Forms\Controls;
+namespace B4nan\Forms\Controls;
 
 use Nette\Forms\Form;
 
@@ -25,7 +25,7 @@ class BooleanInput extends \Nette\Forms\Controls\RadioList
 
 	/**
 	 * @param bool|int $value
-	 * @return \Bargency\Forms\Controls\PhoneInput
+	 * @return \B4nan\Forms\Controls\PhoneInput
 	 */
 	public function setValue($value)
 	{

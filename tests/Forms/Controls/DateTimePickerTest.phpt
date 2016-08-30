@@ -1,8 +1,8 @@
 <?php
 
-namespace Bargency\Tests\Forms\Controls;
+namespace B4nan\Tests\Forms\Controls;
 
-use Bargency\Forms\Controls\DateTimePicker;
+use B4nan\Forms\Controls\DateTimePicker;
 use Tester\TestCase,
 	Tester\Assert,
 	Tester\DomQuery;

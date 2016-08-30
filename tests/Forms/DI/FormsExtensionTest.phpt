@@ -1,8 +1,8 @@
 <?php
 
-namespace Bargency\Tests\Forms;
+namespace B4nan\Tests\Forms;
 
-use Bargency\Forms\DI\FormsExtension;
+use B4nan\Forms\DI\FormsExtension;
 use Nette\Configurator;
 use Nette\DI\Container;
 use Tester\TestCase;

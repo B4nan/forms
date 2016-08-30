@@ -1,14 +1,14 @@
 <?php
 
-namespace Bargency\Forms\DI;
+namespace B4nan\Forms\DI;
 
-use Bargency\Forms\Container;
-use Bargency\Forms\Controls\DateTimePicker;
-use Bargency\Forms\Controls\MultiUpload\Uploader;
-use Bargency\Forms\Controls\TagInput;
-use Bargency\Forms\Form;
-use Bargency\Forms\FormMacros3;
-use Bargency\Forms\Renderer3;
+use B4nan\Forms\Container;
+use B4nan\Forms\Controls\DateTimePicker;
+use B4nan\Forms\Controls\MultiUpload\Uploader;
+use B4nan\Forms\Controls\TagInput;
+use B4nan\Forms\Form;
+use B4nan\Forms\FormMacros3;
+use B4nan\Forms\Renderer3;
 use Kdyby\Replicator;
 use Nette\Forms\Validator;
 use Nette\PhpGenerator\ClassType;
@@ -33,7 +33,7 @@ class FormsExtension extends CompilerExtension
 	];
 
 	/**
-	 * Load configuration for Bargency Forms
+	 * Load configuration for B4nan Forms
 	 * registers Form Macros
 	 */
 	public function loadConfiguration()
@@ -57,7 +57,7 @@ class FormsExtension extends CompilerExtension
 		$initialize = $class->methods['initialize'];
 		$config = $this->getConfig($this->defaults);
 		if ($config['multiupload']) {
-			$initialize->addBody('Bargency\Forms\Controls\MultiUpload::register($this);');
+			$initialize->addBody('B4nan\Forms\Controls\MultiUpload::register($this);');
 		}
 		$initialize->addBody(Container::class . '::register();');
 		$initialize->addBody(Replicator\Container::class . '::register();');
@@ -74,7 +74,7 @@ class FormsExtension extends CompilerExtension
 	public static function register(Configurator $config)
 	{
 		$config->onCompile[] = function (Configurator $config, Compiler $compiler) {
-			$compiler->addExtension('BargencyForms', new FormsExtension);
+			$compiler->addExtension('B4nanForms', new FormsExtension);
 		};
 	}
 

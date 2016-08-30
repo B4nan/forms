@@ -1,21 +1,21 @@
 <?php
 
-namespace Bargency\Tests\Forms;
+namespace B4nan\Tests\Forms;
 
-use Bargency\Forms\Container;
-use Bargency\Forms\Controls\BooleanInput;
-use Bargency\Forms\Controls\CKEditor;
-use Bargency\Forms\Controls\DatePicker;
-use Bargency\Forms\Controls\DateRangePicker;
-use Bargency\Forms\Controls\DateTimePicker;
-use Bargency\Forms\Controls\EditableSelectBox;
-use Bargency\Forms\Controls\HiddenField;
-use Bargency\Forms\Controls\MultiUpload;
-use Bargency\Forms\Controls\PhoneInput;
-use Bargency\Forms\Controls\Redactor;
-use Bargency\Forms\Controls\TagInput;
-use Bargency\Forms\Controls\UrlInput;
-use Bargency\Forms\DI\FormsExtension;
+use B4nan\Forms\Container;
+use B4nan\Forms\Controls\BooleanInput;
+use B4nan\Forms\Controls\CKEditor;
+use B4nan\Forms\Controls\DatePicker;
+use B4nan\Forms\Controls\DateRangePicker;
+use B4nan\Forms\Controls\DateTimePicker;
+use B4nan\Forms\Controls\EditableSelectBox;
+use B4nan\Forms\Controls\HiddenField;
+use B4nan\Forms\Controls\MultiUpload;
+use B4nan\Forms\Controls\PhoneInput;
+use B4nan\Forms\Controls\Redactor;
+use B4nan\Forms\Controls\TagInput;
+use B4nan\Forms\Controls\UrlInput;
+use B4nan\Forms\DI\FormsExtension;
 use Nette\Forms\Controls\Button;
 use Nette\Forms\Controls\CsrfProtection;
 use Nette\Forms\Controls\MultiSelectBox;
@@ -25,7 +25,7 @@ use Nette\Forms\Controls\TextInput;
 use Nette\Utils\Html;
 use Tester\TestCase,
 	Tester\Assert,
-	Bargency\Forms\Form;
+	B4nan\Forms\Form;
 
 require __DIR__ . '/../bootstrap.php';
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bargency\Tests\Forms\Controls;
+namespace B4nan\Tests\Forms\Controls;
 
-use Bargency\Forms\Controls\TagInput;
+use B4nan\Forms\Controls\TagInput;
 use Nette\Forms\Form;
 use Nette\Utils\Html;
 use Tester\TestCase;

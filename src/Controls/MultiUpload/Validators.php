@@ -1,6 +1,6 @@
 <?php
 
-namespace Bargency\Forms\Controls\MultiUpload;
+namespace B4nan\Forms\Controls\MultiUpload;
 
 use Nette\Forms\Controls\UploadControl;
 use Nette\Forms\IControl;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bargency\Forms;
+namespace B4nan\Forms;
 
 use Nette\Application\UI\Form as NForm;
 use Nette\Application\UI\Presenter;

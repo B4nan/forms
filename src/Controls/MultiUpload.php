@@ -1,8 +1,8 @@
 <?php
 
-namespace Bargency\Forms\Controls;
+namespace B4nan\Forms\Controls;
 
-use Bargency\Forms\Controls\MultiUpload\Uploader;
+use B4nan\Forms\Controls\MultiUpload\Uploader;
 use Nette\Application\UI\Form;
 use Nette\DI\Container;
 use Nette\Forms\Controls\UploadControl;

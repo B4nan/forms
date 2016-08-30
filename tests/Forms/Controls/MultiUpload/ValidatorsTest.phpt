@@ -1,11 +1,11 @@
 <?php
 
-namespace Bargency\Tests\Forms\Controls;
+namespace B4nan\Tests\Forms\Controls;
 
-use Bargency\Forms\Controls\MultiUpload;
-use Bargency\Forms\Controls\MultiUpload\Validators;
-use Bargency\Forms\DI\FormsExtension;
-use Bargency\Forms\Form;
+use B4nan\Forms\Controls\MultiUpload;
+use B4nan\Forms\Controls\MultiUpload\Validators;
+use B4nan\Forms\DI\FormsExtension;
+use B4nan\Forms\Form;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Container;
 use Nette\Forms\Controls\UploadControl;

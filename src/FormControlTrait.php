@@ -1,9 +1,9 @@
 <?php
 
-namespace Bargency\Forms;
+namespace B4nan\Forms;
 
-use Bargency\Forms\Controls\HiddenField;
-use Bargency\Forms\Controls\TagInput;
+use B4nan\Forms\Controls\HiddenField;
+use B4nan\Forms\Controls\TagInput;
 use Kdyby\Replicator\Container as ReplicatorContainer;
 use Nette\Forms\Controls\BaseControl;
 use Nette\Forms\Controls\SubmitButton;

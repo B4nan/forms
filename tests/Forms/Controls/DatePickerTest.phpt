@@ -1,10 +1,10 @@
 <?php
 
-namespace Bargency\Tests\Forms\Controls;
+namespace B4nan\Tests\Forms\Controls;
 
 use Tester\TestCase,
 	Tester\Assert,
-	Bargency\Forms\Container;
+	B4nan\Forms\Container;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -20,7 +20,7 @@ class DatePickerTest extends TestCase
 
 	public function setUp()
 	{
-		$this->control = new \Bargency\Forms\Controls\DatePicker;
+		$this->control = new \B4nan\Forms\Controls\DatePicker;
 	}
 
 	public function getValues()

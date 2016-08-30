@@ -1,6 +1,6 @@
 <?php
 
-namespace Bargency\Tests\Forms\Controls;
+namespace B4nan\Tests\Forms\Controls;
 
 use Tester\TestCase,
 	Tester\Assert,
@@ -20,7 +20,7 @@ class PhoneInputTest extends TestCase
 
 	public function setUp()
 	{
-		$this->control = new \Bargency\Forms\Controls\PhoneInput;
+		$this->control = new \B4nan\Forms\Controls\PhoneInput;
 	}
 
 	public function getValues()
